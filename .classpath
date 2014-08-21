@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="mysql-connector-java-3.1.12-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Users/XWEN/Downloads/jsoup-1.7.1.jar"/>
+	<classpathentry kind="lib" path="/Users/XWEN/Documents/workspace/dbsync/joda-time-2.1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/XWEN/Documents/workspace/dbsync/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="commons-lang-2.6/commons-lang-2.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
