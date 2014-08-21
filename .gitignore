@@ -1,2 +1,3 @@
 /src/edu/pitt/sis/paws/dbsync/ConnectHalleyDB.java
+src/edu/pitt/sis/paws/dbsync/ConnectWurzburgDB.java
 src/edu/pitt/sis/paws/dbsync/ConnectHalleyDB.java
