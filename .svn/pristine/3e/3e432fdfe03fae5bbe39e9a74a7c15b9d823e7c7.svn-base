@@ -12,41 +12,44 @@ public class importCSVpaper {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ConnectHalleyDB conn = new ConnectHalleyDB();
-//		String sql = "SELECT * FROM cn3fromcn20.admin_content_ectel2013_keynote WHERE contentID > 3";
-		String sql = "SELECT * FROM cn3Testing_new_dump.admin_content_ht2014 WHERE contentID > 83;";
-		
+		String sql = "SELECT * FROM `iconf2013`";
 		ResultSet rs = conn.getResultSet(sql);
 		try {
 			//int paperID = 5594;
-			int conferenceID = 130;
+			int conferenceID = 98;
 			while(rs.next()){
-				String title = rs.getString("title");
-				String _authors = rs.getString("author_list");//rs.getString("authors");author_list
-				String track = rs.getString("contentTrack");//rs.getString("track");contentTrack
-				String Category = rs.getString("contentType");//rs.getString("category");contentType//type
+				String title = rs.getString("Title");
+				String _authors = rs.getString("authors");
+				String track = null;//rs.getString("track");
+				String Category = null;//rs.getString("category");
 				String keywords = rs.getString("keywords");
 				String _abstract = rs.getString("abstract");
-				//String contentLink = null;//rs.getString("url");String _authors1 = rs.getString("authors_formatted_1_name");//rs.getString("authors");
-
+				String contentLink = null;//rs.getString("url");
 				/*if(contentLink!=null){
 					if(contentLink.trim().length()==0){
 						contentLink=null;
 					}
 				}*/
 				
-				//keywords = keywords.replaceAll("\\n|\\r|\\r\\n", ",");
-				//System.out.println("parsed keywords: " + keywords);
+				System.out.println("original authors: " + _authors);
+				_authors = _authors.replaceAll("\\s+and\\s+", ",");
+				System.out.println("parsed authors: " + _authors);
+				
+				/*System.out.println("original keywords: " + keywords);
+				keywords = keywords.replaceAll("\\n|\\r|\\r\\n", ",");
+				System.out.println("parsed keywords: " + keywords);*/
 				
 				sql = "INSERT INTO content " +
-						"(title,abstract,conferenceID,contentType,keywords,contentTrack) " +
-						"VALUES (?,?,?,?,?,?)";	        
+						"(title,abstract,conferenceID,contentType,contentTrack,keywords,contentLink) " +
+						"VALUES (?,?,?,?,?,?,?)";	        
 				PreparedStatement pstmt = conn.conn.prepareStatement(sql);
 				pstmt.setString(1,title);
 				pstmt.setString(2,_abstract);
 				pstmt.setLong(3,conferenceID);
 				pstmt.setString(4,Category);
-				pstmt.setString(5,keywords);
-				pstmt.setString(6,track);
+				pstmt.setString(5,track);
+				pstmt.setString(6,keywords);
+				pstmt.setString(7,contentLink);
 				//pstmt.setInt(8,paperID);
 				pstmt.executeUpdate();
 				pstmt.close();
@@ -57,43 +60,16 @@ public class importCSVpaper {
 				if(rsContent.next()){
 					String contentID = rsContent.getString(1);
 					System.out.println("contentID: " + contentID);
-					/*
-					String time = "2013-02-25 00:00:00";
-					String beginTime = "2013-02-25 18:00:00";
-					String endTime = "2013-02-25 20:30:00";
-					String eventSessionID = "1253";
-					String presentationType = "Posters";//;//"Paper"//"Note"
-					sql = "INSERT INTO presentation " +
-							"(presentationDate,beginTime,endTime,contentID,eventSessionID,presentationType) " +
-							"VALUES (?,?,?,?,?,?)";	        
-					pstmt = conn.conn.prepareStatement(sql);
-					pstmt.setString(1,time);
-					pstmt.setString(2,beginTime);
-					pstmt.setString(3,endTime);
-					pstmt.setString(4,contentID);
-					pstmt.setString(5,eventSessionID);	
-					pstmt.setString(6,presentationType);
-					String insertSql = pstmt.toString();
-		        	System.out.println(insertSql);
-
-					pstmt.executeUpdate();
-					pstmt.close();
-					*/
-					
-					
 					int authorno = 1;
 					if(_authors!=null){
-						String[] authors = _authors.split(",");//_authors.split(",");
+						String[] authors = _authors.split(",");
 						System.out.println("Authors: " + _authors);
 						for(int i=0;i<authors.length;i++){
 							if(authors[i].trim().length()==0)continue;
 							String authorID = null;
 							String userID = null;
-														
-							System.out.println(authors[i]);
 							sql = "SELECT authorID,userID FROM author WHERE name REGEXP '" + authors[i].trim().replaceAll("'","''") + "'";
 							System.out.println(sql);		
-							
 							rsContent = conn.getResultSet(sql);
 							if(rsContent.next()){
 								authorID = rsContent.getString("authorID");
@@ -140,7 +116,6 @@ public class importCSVpaper {
 							System.out.println(sql);		
 							conn.executeUpdate(sql);
 							authorno++;		
-							
 						}
 					}
 		
@@ -390,7 +365,6 @@ public class importCSVpaper {
 				}                
 
 			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,0 +1,481 @@
+package edu.pitt.sis.paws.dbsync;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+public class SyncContent {
+
+	class author{
+		public String getGiven_name() {
+			return given_name;
+		}
+		public void setGiven_name(String givenName) {
+			given_name = givenName;
+		}
+		public String getFamily_name() {
+			return family_name;
+		}
+		public void setFamily_name(String familyName) {
+			family_name = familyName;
+		}
+		public String getEmail_address() {
+			return email_address;
+		}
+		public void setEmail_address(String emailAddress) {
+			email_address = emailAddress;
+		}
+		public String getAffiliation_department() {
+			return affiliation_department;
+		}
+		public void setAffiliation_department(String affiliationDepartment) {
+			affiliation_department = affiliationDepartment;
+		}
+		public String getAffiliation_institution() {
+			return affiliation_institution;
+		}
+		public void setAffiliation_institution(String affiliationInstitution) {
+			affiliation_institution = affiliationInstitution;
+		}
+		public String getAffiliation_city() {
+			return affiliation_city;
+		}
+		public void setAffiliation_city(String affiliationCity) {
+			affiliation_city = affiliationCity;
+		}
+		public String getAffiliation_state_or_province() {
+			return affiliation_state_or_province;
+		}
+		public void setAffiliation_state_or_province(String affiliationStateOrProvince) {
+			affiliation_state_or_province = affiliationStateOrProvince;
+		}
+		public String getAffiliation_country() {
+			return affiliation_country;
+		}
+		public void setAffiliation_country(String affiliationCountry) {
+			affiliation_country = affiliationCountry;
+		}
+		String given_name = null;
+		String family_name = null;
+		String email_address = null;
+		String affiliation_department = null;
+		String affiliation_institution = null;
+		String affiliation_city = null;
+		String affiliation_state_or_province = null;
+		String affiliation_country = null;
+	};
+	
+	public SyncContent(){
+		int conferenceID = 97;
+		ConnectHalleyDB conn = new ConnectHalleyDB();
+		String sql = "DELETE authorpresenter a FROM authorpresenter a JOIN content c ON a.contentID=c.contentID WHERE c.conferenceID=" + conferenceID;
+		//conn.executeUpdate(sql);
+
+		/*sql = "DELETE FROM content WHERE conferenceID=" + conferenceID + 
+				//" AND contentType='Workshop'" +
+				"";
+		conn.executeUpdate(sql);*/
+
+		sql = "SELECT contentID " + //,title,abstract,contentType,keywords " +
+				"FROM cn3Testing_new_dump.content " +
+				"WHERE conferenceID = " + conferenceID + " AND contentID>=" + 6375;
+		
+		/*sql = "SELECT c0.contentID,c0.cscwID," +
+				"c2.given_name_1,c2.family_name_1,c2.email_address_1,c2.affiliation_1_department,c2.affiliation_1_institution,c2.affiliation_1_city," +
+				"c2.affiliation_1_state_or_province,c2.affiliation_1_country," +
+				"c2.given_name_2,c2.family_name_2,c2.email_address_2,c2.affiliation_2_department,c2.affiliation_2_institution,c2.affiliation_2_city," +
+				"c2.affiliation_2_state_or_province,c2.affiliation_2_country," +
+				"c2.given_name_3,c2.family_name_3,c2.email_address_3,c2.affiliation_3_department,c2.affiliation_3_institution,c2.affiliation_3_city," +
+				"c2.affiliation_3_state_or_province,c2.affiliation_3_country," +
+				"c2.given_name_4,c2.family_name_4,c2.email_address_4,c2.affiliation_4_department,c2.affiliation_4_institution,c2.affiliation_4_city," +
+				"c2.affiliation_4_state_or_province,c2.affiliation_4_country," +
+				"c2.given_name_5,c2.family_name_5,c2.email_address_5,c2.affiliation_5_department,c2.affiliation_5_institution,c2.affiliation_5_city," +
+				"c2.affiliation_5_state_or_province,c2.affiliation_5_country," +
+				"c3.given_name_6,c3.family_name_6,c3.email_address_6,c3.affiliation_6_department,c3.affiliation_6_institution,c3.affiliation_6_city," +
+				"c3.affiliation_6_state_or_province,c3.affiliation_6_country," +
+				"c3.given_name_7,c3.family_name_7,c3.email_address_7,c3.affiliation_7_department,c3.affiliation_7_institution,c3.affiliation_7_city," +
+				"c3.affiliation_7_state_or_province,c3.affiliation_7_country," +
+				"c3.given_name_8,c3.family_name_8,c3.email_address_8,c3.affiliation_8_department,c3.affiliation_8_institution,c3.affiliation_8_city," +
+				"c3.affiliation_8_state_or_province,c3.affiliation_8_country," +
+				"c3.given_name_9,c3.family_name_9,c3.email_address_9,c3.affiliation_9_department,c3.affiliation_9_institution,c3.affiliation_9_city," +
+				"c3.affiliation_9_state_or_province,c3.affiliation_9_country," +
+				"c3.given_name_10,c3.family_name_10,c3.email_address_10,c3.affiliation_10_department,c3.affiliation_10_institution,c3.affiliation_10_city," +
+				"c3.affiliation_10_state_or_province,c3.affiliation_10_country " +
+				"FROM " +
+				"cn3Testing_new_dump.cscw2013_papers_part2 c2 " +
+				"JOIN cn3Testing_new_dump.cscw2013_papers_part3 c3 ON c2.`ID` = c3.`ID` " +
+				"JOIN cn3Testing_new_dump.tmpcscw c0 ON c2.`ID` = c0.cscwID";*/
+
+		try {
+			System.out.println("Getting contents from cn3Testing_new_dump");
+			ResultSet rs = conn.getResultSet(sql);
+			while(rs.next()){
+				long productionContentID = -1;
+				long contentID = rs.getLong("contentID");
+				//long cscwID = rs.getLong("cscwID");
+
+				/*ArrayList<author> aList = new ArrayList<author>();
+				
+				String given_name_1 = rs.getString("given_name_1");
+				String family_name_1 = rs.getString("family_name_1");
+				String email_address_1 = rs.getString("email_address_1");
+				String affiliation_1_department = rs.getString("affiliation_1_department");
+				String affiliation_1_institution = rs.getString("affiliation_1_institution");
+				String affiliation_1_city = rs.getString("affiliation_1_city");
+				String affiliation_1_state_or_province = rs.getString("affiliation_1_state_or_province");
+				String affiliation_1_country = rs.getString("affiliation_1_country");
+				if(given_name_1.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_1);
+					a.setFamily_name(family_name_1);
+					a.setEmail_address(email_address_1);
+					a.setAffiliation_department(affiliation_1_department);
+					a.setAffiliation_institution(affiliation_1_institution);
+					a.setAffiliation_city(affiliation_1_city);
+					a.setAffiliation_state_or_province(affiliation_1_state_or_province);
+					a.setAffiliation_country(affiliation_1_country);
+					aList.add(a);
+				}
+				
+				String given_name_2 = rs.getString("given_name_2");
+				String family_name_2 = rs.getString("family_name_2");
+				String email_address_2 = rs.getString("email_address_2");
+				String affiliation_2_department = rs.getString("affiliation_2_department");
+				String affiliation_2_institution = rs.getString("affiliation_2_institution");
+				String affiliation_2_city = rs.getString("affiliation_2_city");
+				String affiliation_2_state_or_province = rs.getString("affiliation_2_state_or_province");
+				String affiliation_2_country = rs.getString("affiliation_2_country");
+				if(given_name_2.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_2);
+					a.setFamily_name(family_name_2);
+					a.setEmail_address(email_address_2);
+					a.setAffiliation_department(affiliation_2_department);
+					a.setAffiliation_institution(affiliation_2_institution);
+					a.setAffiliation_city(affiliation_2_city);
+					a.setAffiliation_state_or_province(affiliation_2_state_or_province);
+					a.setAffiliation_country(affiliation_2_country);
+					aList.add(a);
+				}
+
+				String given_name_3 = rs.getString("given_name_3");
+				String family_name_3 = rs.getString("family_name_3");
+				String email_address_3 = rs.getString("email_address_3");
+				String affiliation_3_department = rs.getString("affiliation_3_department");
+				String affiliation_3_institution = rs.getString("affiliation_3_institution");
+				String affiliation_3_city = rs.getString("affiliation_3_city");
+				String affiliation_3_state_or_province = rs.getString("affiliation_3_state_or_province");
+				String affiliation_3_country = rs.getString("affiliation_3_country");
+				if(given_name_3.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_3);
+					a.setFamily_name(family_name_3);
+					a.setEmail_address(email_address_3);
+					a.setAffiliation_department(affiliation_3_department);
+					a.setAffiliation_institution(affiliation_3_institution);
+					a.setAffiliation_city(affiliation_3_city);
+					a.setAffiliation_state_or_province(affiliation_3_state_or_province);
+					a.setAffiliation_country(affiliation_3_country);
+					aList.add(a);
+				}
+				
+				String given_name_4 = rs.getString("given_name_4");
+				String family_name_4 = rs.getString("family_name_4");
+				String email_address_4 = rs.getString("email_address_4");
+				String affiliation_4_department = rs.getString("affiliation_4_department");
+				String affiliation_4_institution = rs.getString("affiliation_4_institution");
+				String affiliation_4_city = rs.getString("affiliation_4_city");
+				String affiliation_4_state_or_province = rs.getString("affiliation_4_state_or_province");
+				String affiliation_4_country = rs.getString("affiliation_4_country");
+				if(given_name_4.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_4);
+					a.setFamily_name(family_name_4);
+					a.setEmail_address(email_address_4);
+					a.setAffiliation_department(affiliation_4_department);
+					a.setAffiliation_institution(affiliation_4_institution);
+					a.setAffiliation_city(affiliation_4_city);
+					a.setAffiliation_state_or_province(affiliation_4_state_or_province);
+					a.setAffiliation_country(affiliation_4_country);
+					aList.add(a);
+				}
+				
+				String given_name_5 = rs.getString("given_name_5");
+				String family_name_5 = rs.getString("family_name_5");
+				String email_address_5 = rs.getString("email_address_5");
+				String affiliation_5_department = rs.getString("affiliation_5_department");
+				String affiliation_5_institution = rs.getString("affiliation_5_institution");
+				String affiliation_5_city = rs.getString("affiliation_5_city");
+				String affiliation_5_state_or_province = rs.getString("affiliation_5_state_or_province");
+				String affiliation_5_country = rs.getString("affiliation_5_country");
+				if(given_name_5.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_5);
+					a.setFamily_name(family_name_5);
+					a.setEmail_address(email_address_5);
+					a.setAffiliation_department(affiliation_5_department);
+					a.setAffiliation_institution(affiliation_5_institution);
+					a.setAffiliation_city(affiliation_5_city);
+					a.setAffiliation_state_or_province(affiliation_5_state_or_province);
+					a.setAffiliation_country(affiliation_5_country);
+					aList.add(a);
+				}
+				
+				String given_name_6 = rs.getString("given_name_6");
+				String family_name_6 = rs.getString("family_name_6");
+				String email_address_6 = rs.getString("email_address_6");
+				String affiliation_6_department = rs.getString("affiliation_6_department");
+				String affiliation_6_institution = rs.getString("affiliation_6_institution");
+				String affiliation_6_city = rs.getString("affiliation_6_city");
+				String affiliation_6_state_or_province = rs.getString("affiliation_6_state_or_province");
+				String affiliation_6_country = rs.getString("affiliation_6_country");
+				if(given_name_6.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_6);
+					a.setFamily_name(family_name_6);
+					a.setEmail_address(email_address_6);
+					a.setAffiliation_department(affiliation_6_department);
+					a.setAffiliation_institution(affiliation_6_institution);
+					a.setAffiliation_city(affiliation_6_city);
+					a.setAffiliation_state_or_province(affiliation_6_state_or_province);
+					a.setAffiliation_country(affiliation_6_country);
+					aList.add(a);
+				}
+				
+				String given_name_7 = rs.getString("given_name_7");
+				String family_name_7 = rs.getString("family_name_7");
+				String email_address_7 = rs.getString("email_address_7");
+				String affiliation_7_department = rs.getString("affiliation_7_department");
+				String affiliation_7_institution = rs.getString("affiliation_7_institution");
+				String affiliation_7_city = rs.getString("affiliation_7_city");
+				String affiliation_7_state_or_province = rs.getString("affiliation_7_state_or_province");
+				String affiliation_7_country = rs.getString("affiliation_7_country");
+				if(given_name_7.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_7);
+					a.setFamily_name(family_name_7);
+					a.setEmail_address(email_address_7);
+					a.setAffiliation_department(affiliation_7_department);
+					a.setAffiliation_institution(affiliation_7_institution);
+					a.setAffiliation_city(affiliation_7_city);
+					a.setAffiliation_state_or_province(affiliation_7_state_or_province);
+					a.setAffiliation_country(affiliation_7_country);
+					aList.add(a);
+				}
+				
+				String given_name_8 = rs.getString("given_name_8");
+				String family_name_8 = rs.getString("family_name_8");
+				String email_address_8 = rs.getString("email_address_8");
+				String affiliation_8_department = rs.getString("affiliation_8_department");
+				String affiliation_8_institution = rs.getString("affiliation_8_institution");
+				String affiliation_8_city = rs.getString("affiliation_8_city");
+				String affiliation_8_state_or_province = rs.getString("affiliation_8_state_or_province");
+				String affiliation_8_country = rs.getString("affiliation_8_country");
+				if(given_name_8.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_8);
+					a.setFamily_name(family_name_8);
+					a.setEmail_address(email_address_8);
+					a.setAffiliation_department(affiliation_8_department);
+					a.setAffiliation_institution(affiliation_8_institution);
+					a.setAffiliation_city(affiliation_8_city);
+					a.setAffiliation_state_or_province(affiliation_8_state_or_province);
+					a.setAffiliation_country(affiliation_8_country);
+					aList.add(a);
+				}
+				
+				String given_name_9 = rs.getString("given_name_9");
+				String family_name_9 = rs.getString("family_name_9");
+				String email_address_9 = rs.getString("email_address_9");
+				String affiliation_9_department = rs.getString("affiliation_9_department");
+				String affiliation_9_institution = rs.getString("affiliation_9_institution");
+				String affiliation_9_city = rs.getString("affiliation_9_city");
+				String affiliation_9_state_or_province = rs.getString("affiliation_9_state_or_province");
+				String affiliation_9_country = rs.getString("affiliation_9_country");
+				if(given_name_9.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_9);
+					a.setFamily_name(family_name_9);
+					a.setEmail_address(email_address_9);
+					a.setAffiliation_department(affiliation_9_department);
+					a.setAffiliation_institution(affiliation_9_institution);
+					a.setAffiliation_city(affiliation_9_city);
+					a.setAffiliation_state_or_province(affiliation_9_state_or_province);
+					a.setAffiliation_country(affiliation_9_country);
+					aList.add(a);
+				}
+				
+				String given_name_10 = rs.getString("given_name_10");
+				String family_name_10 = rs.getString("family_name_10");
+				String email_address_10 = rs.getString("email_address_10");
+				String affiliation_10_department = rs.getString("affiliation_10_department");
+				String affiliation_10_institution = rs.getString("affiliation_10_institution");
+				String affiliation_10_city = rs.getString("affiliation_10_city");
+				String affiliation_10_state_or_province = rs.getString("affiliation_10_state_or_province");
+				String affiliation_10_country = rs.getString("affiliation_10_country");
+				if(given_name_10.trim().length() > 0){
+					author a = new author();
+					a.setGiven_name(given_name_10);
+					a.setFamily_name(family_name_10);
+					a.setEmail_address(email_address_10);
+					a.setAffiliation_department(affiliation_10_department);
+					a.setAffiliation_institution(affiliation_10_institution);
+					a.setAffiliation_city(affiliation_10_city);
+					a.setAffiliation_state_or_province(affiliation_10_state_or_province);
+					a.setAffiliation_country(affiliation_10_country);
+					aList.add(a);
+				}
+				
+				int authorNo = 1;
+				for(author a : aList){
+					System.out.println("Author: " + a.getGiven_name() + " " + a.getFamily_name());
+					String authorID = null;
+					String userID = null;
+					sql = "SELECT authorID,userID FROM author WHERE name REGEXP '" + a.getGiven_name().concat(" ")
+																					.concat(a.getFamily_name()).trim().replaceAll("'","''") + "'";
+					rsAuthor = conn.getResultSet(sql);
+					if(rsAuthor.next()){
+						authorID = rsAuthor.getString("authorID");
+						userID = rsAuthor.getString("userID");
+					}else{
+						sql = "INSERT INTO author (name,address,departmentAffiliation,universityAffiliation,position) VALUES " +
+								"(?,?,?,?,?) ";
+						//System.out.println(sql);		
+						//conn.executeUpdate(sql);
+						PreparedStatement pstmt = conn.conn.prepareStatement(sql);
+						pstmt.setString(1, a.getGiven_name().concat(" ").concat(a.getFamily_name()).trim());
+						pstmt.setString(2, "N/A");
+						pstmt.setString(3, a.getAffiliation_department());
+						pstmt.setString(4, a.getAffiliation_institution());
+						pstmt.setString(5, "N/A");
+						pstmt.executeUpdate();
+						
+						sql = "SELECT LAST_INSERT_ID()";
+						rsAuthor = conn.getResultSet(sql);
+						if(rsAuthor.next()){
+							authorID = rsAuthor.getString(1);
+						}
+					}
+					
+					/*if(userID==null){
+						sql = "SELECT userID FROM cn3Testing_new_dump.userinfo WHERE email REGEXP '" + a.getEmail_address().trim().replaceAll("'","''") + "'";
+						System.out.println(sql);
+						rsAuthor = conn.getResultSet(sql);
+						if(rsAuthor.next()){
+							userID = rsAuthor.getString("userID");
+							sql = "SELECT authorID FROM author WHERE userID=" + userID;
+							System.out.println(sql);
+							rsAuthor = conn.getResultSet(sql);
+							if(rsAuthor.next()){
+								authorID = rsAuthor.getString("authorID");
+							}
+						}
+					}
+
+					System.out.println("authorID: " + authorID + " userID: " + userID);		
+
+					sql = "INSERT INTO authorpresenter (contentID,authorID,authorNo) VALUES (" + contentID + "," + authorID + "," + authorNo + ")";
+					System.out.println(sql);		
+					conn.executeUpdate(sql);
+					
+					authorNo++;
+				}*/
+				
+				sql = "INSERT INTO content (title,abstract,contentType,keywords,conferenceID) " +
+						"SELECT c.title,c.abstract,c.contentType,c.keywords,c.conferenceID FROM cn3Testing_new_dump.content c WHERE c.contentID=" + contentID;
+
+				System.out.println(sql);
+				conn.executeUpdate(sql);
+				
+				sql = "SELECT LAST_INSERT_ID()";
+				ResultSet rsProduction = conn.getResultSet(sql);
+				if(rsProduction.next()){
+					productionContentID = rsProduction.getInt(1);
+				}
+				
+				if(productionContentID > 0){
+					sql = "SELECT a.name,a.address,a.departmentAffiliation,a.universityAffiliation,a.position,ap.authorNo " +
+							"FROM cn3Testing_new_dump.content c JOIN cn3Testing_new_dump.authorpresenter ap ON c.contentID = ap.contentID " +
+							"JOIN cn3Testing_new_dump.author a ON ap.authorID = a.authorID " +
+									"WHERE c.contentID =" + contentID;
+					System.out.println("Getting authors from cn3Testing_new_dump");
+					rsProduction = conn.getResultSet(sql);
+					while(rsProduction.next()){
+						
+						String name = rsProduction.getString("name");
+						String address = rsProduction.getString("address");
+						String department = rsProduction.getString("departmentAffiliation");
+						String university = rsProduction.getString("universityAffiliation");
+						String position = rsProduction.getString("position");
+						long authorNo = rsProduction.getLong("authorNo");
+						
+						System.out.println("Authors: " + name);
+						String authorID = null;
+						String userID = null;
+
+						sql = "SELECT authorID,userID FROM author WHERE name REGEXP '" + name.trim().replaceAll("'","''") + "'";
+						ResultSet rsAuthor = conn.getResultSet(sql);
+						if(rsAuthor.next()){
+							authorID = rsAuthor.getString("authorID");
+							userID = rsAuthor.getString("userID");
+						}else{
+							sql = "INSERT INTO author (name,address,departmentAffiliation,universityAffiliation,position) VALUES " +
+									"(?,?,?,?,?) ";
+							//System.out.println(sql);		
+							//conn.executeUpdate(sql);
+							PreparedStatement pstmt = conn.conn.prepareStatement(sql);
+							pstmt.setString(1, name);
+							pstmt.setString(2, address);
+							pstmt.setString(3, department);
+							pstmt.setString(4, university);
+							pstmt.setString(5, position);
+							pstmt.executeUpdate();
+							
+							sql = "SELECT LAST_INSERT_ID()";
+							rsAuthor = conn.getResultSet(sql);
+							if(rsAuthor.next()){
+								authorID = rsAuthor.getString(1);
+								address = "N/A";
+							}
+						}
+
+						if(userID==null){
+							sql = "SELECT userID FROM userinfo WHERE name REGEXP '" + name.trim().replaceAll("'","''") + "'";
+							System.out.println(sql);
+							rsAuthor = conn.getResultSet(sql);
+							if(rsAuthor.next()){
+								userID = rsAuthor.getString("userID");
+								sql = "SELECT authorID FROM author WHERE userID=" + userID;
+								System.out.println(sql);
+								rsAuthor = conn.getResultSet(sql);
+								if(rsAuthor.next()){
+									authorID = rsAuthor.getString("authorID");
+								}
+							}
+						}
+
+						System.out.println("authorID: " + authorID + " userID: " + userID);		
+						
+						sql = "INSERT INTO authorpresenter (contentID,authorID,authorNo) VALUES (" + productionContentID + "," + authorID + "," + authorNo + ")";
+						System.out.println(sql);		
+						conn.executeUpdate(sql);
+					}
+
+				}
+				
+			}
+			conn.conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new SyncContent();
+	}
+
+}

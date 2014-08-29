@@ -27,7 +27,7 @@ public class generatePaperForCNMobilie {
 		String sql1 = "SELECT p.presentationID,p.eventSessionID,c.contentID,c.title,c.abstract,c.contentType,p.presentationDate, p.beginTime,p.endTime,e.location"
 					+ " FROM presentation p "
 					+ " JOIN eventsession e on p.eventSessionID = e.eventSessionID "
-					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 129 and c.contentType != 'Keynote' "
+					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 130 and c.contentType != 'Keynote' AND p.presentationDate IS NOT NULL"
 //					+ " LEFT JOIN contentlink cl ON c.contentID = cl.contentID"
 //					+ " JOIN authorpresenter a on a.contentID = c.contentID "
 //					+ " JOIN author aa on aa.authorID = a.authorID" 
@@ -112,7 +112,6 @@ public class generatePaperForCNMobilie {
 						break;
 					case 5:
 						weekDay = "Friday";
-						dayid = "5";
 						break;
 					case 6:
 						weekDay = "Saturday";

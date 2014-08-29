@@ -18,7 +18,7 @@ public class generateWorkshopForCNMobilie {
 			//FOR Sessions
 			String sql1 = "SELECT e.eventSessionID,e.sessionName,e.sessionDate,e.beginTime,e.endTime,e.location FROM eventsession e " 
 					+ "JOIN presentation p on e.eventSessionID = p.eventSessionID " 
-					+ "JOIN content c on p.contentID = c.contentID and c.contentType LIKE '%Workshop%' and c.conferenceID = 129 "
+					+ "JOIN content c on p.contentID = c.contentID and c.contentType LIKE '%Workshop%' and c.conferenceID = 130 "
 					+ "GROUP BY eventSessionID";
 
 			ResultSet rs1 = conn.getResultSet(sql1);
@@ -78,7 +78,6 @@ public class generateWorkshopForCNMobilie {
 						break;
 					case 5:
 						weekDay = "Friday";
-						dayid = "5";
 						break;
 					case 6:
 						weekDay = "Saturday";

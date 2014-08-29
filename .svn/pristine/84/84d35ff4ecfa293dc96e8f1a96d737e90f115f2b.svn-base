@@ -10,10 +10,10 @@ public class GenerateTagsForCN3 {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int conferenceID = 130;
+		int conferenceID = 97;
 		ConnectHalleyDB conn = new ConnectHalleyDB();
-		String sql = "SELECT contentID,keywords FROM content WHERE conferenceID =  " + conferenceID +
-				" AND contentID >= 9465" +
+		String sql = "SELECT contentID,keywords FROM content WHERE conferenceid =  " + conferenceID +
+				//" AND contentID >= 6037" +
 				//" AND LENGTH(keywords) > 0" +
 				//" AND contentType='Workshop Paper'" +
 				"";//" AND keywords IS NOT NULL AND LENGTH(TRIM(keywords)) > 0";// AND contentID >= 5589";
@@ -21,8 +21,8 @@ public class GenerateTagsForCN3 {
 			ResultSet rs = conn.getResultSet(sql);
 			while(rs.next()){
 				String contentID = rs.getString("contentID");
-//				sql = "DELETE FROM tagging WHERE contentID = " + contentID + " AND userID = 15";
-//				conn.executeUpdate(sql);
+				sql = "DELETE FROM tagging WHERE contentID = " + contentID + " AND userID = 15";
+				conn.executeUpdate(sql);
 				String keywords = rs.getString("keywords");
 				if(keywords==null)continue;
 				if(keywords.trim().length()==0)continue;

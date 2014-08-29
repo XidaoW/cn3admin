@@ -17,7 +17,7 @@ public class generatePaperContentForCNMobilie {
 			String sql1 = "(SELECT p.presentationID,p.eventSessionID,c.contentID,cl.linkURL,c.title,c.abstract,c.contentType,p.presentationDate, p.beginTime,p.endTime,a.authorID,aa.`name`,e.location,GROUP_CONCAT(DISTINCT aa.`name` ORDER BY a.authorNo ASC SEPARATOR ', ') AS authors, aa.userID,af.organizationAffiliation"
 					+ " FROM presentation p "
 					+ " JOIN eventsession e on p.eventSessionID = e.eventSessionID "
-					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 129 and c.contentType != 'Keynote' and c.contentType NOT IN ('Long Presentation','Doctoral Consotium Paper','Short Presentation')"
+					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 130 and c.contentType != 'Keynote' and c.contentType NOT IN ('Long Presentation','Doctoral Consotium Paper','Short Presentation') AND p.presentationDate IS NOT NULL"
 					+ " LEFT JOIN contentlink cl ON c.contentID = cl.contentID"
 					+ " JOIN authorpresenter a on a.contentID = c.contentID "
 					+ " JOIN author aa on aa.authorID = a.authorID" 
@@ -27,7 +27,7 @@ public class generatePaperContentForCNMobilie {
 					+ "(SELECT p.presentationID,p.eventSessionID,c.contentID,c.DOI as linkURL,c.title,c.abstract,c.contentType,p.presentationDate, p.beginTime,p.endTime,a.authorID,aa.`name`,e.location,GROUP_CONCAT(DISTINCT aa.`name` ORDER BY a.authorNo ASC SEPARATOR ', ') AS authors, aa.userID,af.organizationAffiliation"
 					+ " FROM presentation p "
 					+ " JOIN eventsession e on p.eventSessionID = e.eventSessionID "
-					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 129 and c.contentType != 'Keynote' and c.contentType IN ('Long Presentation','Doctoral Consotium Paper','Short Presentation')"
+					+ " JOIN content c on c.contentID = p.contentID and c.conferenceID = 130 and c.contentType != 'Keynote' and c.contentType IN ('Long Presentation','Doctoral Consotium Paper','Short Presentation') AND p.presentationDate IS NOT NULL"
 					+ " JOIN authorpresenter a on a.contentID = c.contentID "
 					+ " JOIN author aa on aa.authorID = a.authorID" 
 					+ "	LEFT JOIN affiliation af on af.usernameID = aa.userID "
@@ -101,7 +101,6 @@ public class generatePaperContentForCNMobilie {
 						break;
 					case 5:
 						weekDay = "Friday";
-						dayid = "5";
 						break;
 					case 6:
 						weekDay = "Saturday";

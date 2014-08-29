@@ -14,7 +14,7 @@ public class generateSessionForCNMobilie {
 		//For Keynote
 		
 			//FOR Sessions
-			String sql1 = "SELECT * FROM eventsession WHERE eventsession.eventID =129";
+			String sql1 = "SELECT * FROM eventsession WHERE eventsession.eventID =130";
 			System.out.println("//FOR Session****************");
 
 			ResultSet rs1 = conn.getResultSet(sql1);
